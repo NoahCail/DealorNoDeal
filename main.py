@@ -7,29 +7,26 @@ case_values = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5
 
 personal_case_number = 0
 personal_case_value = 0
+countdown = 6
 
 def personal_case_process():
-    selection = input("What case would you like to select to hold on to throughout the game?: ")
-    if int(selection) in case_numbers:
-        personal_case_number += int(selection)
-        value = r.choice(case_values)
-        personal_case_value += value
-        case_numbers.remove(int(selection))
-        case_values.remove(value)
+    selection = int(input("What case would you like to select to hold on to throughout the game?: "))
+    if selection in case_numbers:
+        personal_case_number += selection
+        case_numbers.remove(selection)
 
 def round_process():
     print("Remaining Cases:\n", case_numbers)
     print("\nRemaining Values:\n", case_values)
-    selection = input("\nWhat case would you like to select?: ")
-    if int(selection) in case_numbers:
-        case_numbers.remove(int(selection))
+    selection = int(input("\nWhat case would you like to select?: "))
+    if selection in case_numbers:
+        case_numbers.remove(selection)
         value = r.choice(case_values)
-        print("\nCase #" + str(int(selection)) + "'s value was " + str(value) + "!\n")
+        print("\nCase #" + str(selection) + "'s value was " + str(value) + "!\n")
         case_values.remove(value)
     else:
         print("\nPlease choose a case number from the list of case numbers shown below:\n")
         round_process()
-
 
 def banker_process(values):
     total = 0
@@ -51,8 +48,40 @@ def banker_process(values):
         banker_process(case_values)
     return response
     
-
 personal_case_process()
+
+
+def game_play(values):
+    
+    for i in range(countdown):
+        round_process()
+
+    answer = banker_process(values)
+
+    if answer == "N":
+        if countdown > 1 and len(values) > 2:
+            countdown -= 1
+            game_play(values)
+        elif len(values) == 2:
+            print("You are now down to the final 2 cases!\n")
+            final_answer = int(input("Would you like to stick with your personal case #" + str(personal_case_number) + " or switch to the last remaining case #" + str(case_numbers[0] + "?: ")))
+            if final_answer == personal_case_number:
+                print("Alright it is time to finally open your case and see what you have been holding on to this whole game!\n")
+                print("Congrats you won $" + str(r.choice(values)) + "!")
+            elif final_answer == case_numbers[0]:
+                print("Alright it is time to finally open the last case and see what you have won!\n")
+                print("Congrats you won $" + str(r.choice(values)) + "!")
+            else:
+                #Work on this part, probably need to create this into a function so it can be restarted on its own
+
+        else:
+            game_play(values)
+    # elif answer == "Y":
+    #     replay = input("Would you like to play again? Y or N?: ").upper()
+    #     if replay == "Y":
+    #         countdown = 6
+    #         personal_case_process()
+    #         game_play()
 
 #Round 1
 for i in range(6):
