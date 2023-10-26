@@ -9,11 +9,44 @@ personal_case_number = 0
 personal_case_value = 0
 countdown = 6
 
-def personal_case_process():
+def personal_case_process(case_number):
     selection = int(input("What case would you like to select to hold on to throughout the game?: "))
     if selection in case_numbers:
-        personal_case_number += selection
+        case_number += selection
         case_numbers.remove(selection)
+
+def game_play(values, countdown):
+    
+    for i in range(countdown):
+        round_process()
+
+    answer = banker_process(values)
+
+    if answer == "N":
+        if countdown > 1:
+            countdown -= 1
+            game_play(values, countdown)
+        elif len(values) > 2:
+            game_play(values, countdown)
+        elif len(values) == 2:
+            print("You are now down to the final 2 cases!\n")
+            final_answer = int(input("Would you like to stick with your personal case #" + str(personal_case_number) + " or switch to the last remaining case #" + str(case_numbers[0] + "?: ")))
+            if final_answer == personal_case_number:
+                print("Alright it is time to finally open your case and see what you have been holding on to this whole game!\n")
+                print("Congrats you won $" + str(r.choice(values)) + "!")
+            elif final_answer == case_numbers[0]:
+                print("Alright it is time to finally open the last case and see what you have won!\n")
+                print("Congrats you won $" + str(r.choice(values)) + "!")
+            #else:
+                #Work on this part, probably need to create this into a function so it can be restarted on its own
+        else:
+            game_play(values, countdown)
+    # elif answer == "Y":
+    #     replay = input("Would you like to play again? Y or N?: ").upper()
+    #     if replay == "Y":
+    #         countdown = 6
+    #         personal_case_process()
+    #         game_play()
 
 def round_process():
     print("Remaining Cases:\n", case_numbers)
@@ -48,85 +81,7 @@ def banker_process(values):
         banker_process(case_values)
     return response
     
-personal_case_process()
+personal_case_process(personal_case_number)
 
+game_play(case_values, countdown)
 
-def game_play(values):
-    
-    for i in range(countdown):
-        round_process()
-
-    answer = banker_process(values)
-
-    if answer == "N":
-        if countdown > 1 and len(values) > 2:
-            countdown -= 1
-            game_play(values)
-        elif len(values) == 2:
-            print("You are now down to the final 2 cases!\n")
-            final_answer = int(input("Would you like to stick with your personal case #" + str(personal_case_number) + " or switch to the last remaining case #" + str(case_numbers[0] + "?: ")))
-            if final_answer == personal_case_number:
-                print("Alright it is time to finally open your case and see what you have been holding on to this whole game!\n")
-                print("Congrats you won $" + str(r.choice(values)) + "!")
-            elif final_answer == case_numbers[0]:
-                print("Alright it is time to finally open the last case and see what you have won!\n")
-                print("Congrats you won $" + str(r.choice(values)) + "!")
-            else:
-                #Work on this part, probably need to create this into a function so it can be restarted on its own
-
-        else:
-            game_play(values)
-    # elif answer == "Y":
-    #     replay = input("Would you like to play again? Y or N?: ").upper()
-    #     if replay == "Y":
-    #         countdown = 6
-    #         personal_case_process()
-    #         game_play()
-
-#Round 1
-for i in range(6):
-    round_process()
-
-round_1_answer = banker_process(case_values)
-
-if round_1_answer == "N":
-    for i in range(5):
-        round_process()
-
-round_2_answer = banker_process(case_values)
-
-if round_2_answer == "N":
-    for i in range(4):
-        round_process()
-
-round_3_answer = banker_process(case_values)
-
-if round_3_answer == "N":
-    for i in range(3):
-        round_process()
-
-round_4_answer = banker_process(case_values)
-
-if round_4_answer == "N":
-    for i in range(2):
-        round_process()
-
-round_5_answer = banker_process(case_values)
-
-if round_5_answer == "N":
-    round_process()
-
-round_6_answer = banker_process(case_values)
-
-if round_6_answer == "N":
-    round_process()
-
-round_7_answer = banker_process(case_values)
-
-if round_7_answer == "N":
-    round_process()
-
-round_8_answer = banker_process(case_values)
-
-if round_8_answer == "N":
-    round_process()
