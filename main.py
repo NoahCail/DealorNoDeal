@@ -1,16 +1,21 @@
 import random as r
 
+#List of all the brief case numbers
 case_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
 
+#List of all the values within the brief cases
 case_values = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 
                75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000]
 
+#Placeholder variables meant to store the number and value of the players selected personal brief case
 personal_case_number = 0
 personal_case_value = 0
+
+
 countdown = 6
 
 def personal_case_process(case_number):
-    selection = int(input("What case would you like to select to hold on to throughout the game?: "))
+    selection = int(input("Which of these cases do you think has the million dollars in it?: "))
     if selection in case_numbers:
         case_number += selection
         case_numbers.remove(selection)
